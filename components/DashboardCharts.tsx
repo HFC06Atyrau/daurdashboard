@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   BarChart,
   Bar,
@@ -13,8 +12,7 @@ import {
   Scatter,
   PieChart,
   Pie,
-  Legend,
-  Area
+  Legend
 } from 'recharts';
 import { SalesRecord } from '../types';
 import { formatCurrency, formatNumber } from '../services/dataService';
@@ -25,7 +23,6 @@ interface ChartProps {
   labels: Translation;
 }
 
-// Dark theme palette: Neon Cyan, Hot Pink, Violet, Lime, Orange
 const COLORS = ['#22d3ee', '#f472b6', '#a78bfa', '#a3e635', '#fb923c', '#e879f9', '#38bdf8', '#818cf8'];
 
 const CustomTooltip = ({ active, payload, label, formatter }: any) => {
@@ -62,7 +59,7 @@ export const RevenueChart: React.FC<ChartProps> = ({ data, labels }) => {
         />
         <Tooltip content={<CustomTooltip formatter={(value: number) => formatCurrency(value)} />} cursor={{fill: '#ffffff05'}} />
         <Bar dataKey="revenue" name={labels.revenue} radius={[0, 6, 6, 0]} barSize={24}>
-          {data.map((entry, index) => (
+          {data.map((_entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Bar>
@@ -72,7 +69,6 @@ export const RevenueChart: React.FC<ChartProps> = ({ data, labels }) => {
 };
 
 export const VolumeVsValueChart: React.FC<ChartProps> = ({ data, labels }) => {
-    // Sort by Leads to make the volume bars look organized
     const sortedData = [...data].sort((a,b) => b.leads - a.leads);
 
     return (
@@ -91,9 +87,7 @@ export const VolumeVsValueChart: React.FC<ChartProps> = ({ data, labels }) => {
             axisLine={false}
             tickLine={false}
           />
-          {/* Left Y-Axis for Leads (Bars) */}
           <YAxis yAxisId="left" orientation="left" stroke="#38bdf8" tick={{fontSize: 12, fill: '#38bdf8', fontWeight: 600}} axisLine={false} tickLine={false} />
-          {/* Right Y-Axis for Revenue (Line) */}
           <YAxis yAxisId="right" orientation="right" stroke="#f472b6" tick={{fontSize: 12, fill: '#f472b6', fontWeight: 600}} axisLine={false} tickLine={false} tickFormatter={(val) => `${val/1000}k`} />
           
           <Tooltip content={<CustomTooltip formatter={(value: number, name: string) => {
@@ -127,7 +121,7 @@ export const TopAvgCheckChart: React.FC<ChartProps> = ({ data, labels }) => {
                 />
                 <Tooltip content={<CustomTooltip formatter={(value: number) => formatCurrency(value)} />} cursor={{fill: '#ffffff05'}} />
                 <Bar dataKey="avgCheck" name={labels.avgCheck} radius={[0, 6, 6, 0]} barSize={20}>
-                     {sortedData.map((entry, index) => (
+                     {sortedData.map((_entry, index) => (
                         <Cell key={`cell-${index}`} fill={index === 0 ? '#fb923c' : '#64748b'} />
                     ))}
                 </Bar>
@@ -205,7 +199,7 @@ export const ScatterAnalysis: React.FC<ChartProps> = ({ data, labels }) => {
           }} />} 
         />
         <Scatter name="Channels" data={data} fill="#8884d8">
-          {data.map((entry, index) => (
+          {data.map((_entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Scatter>
@@ -214,7 +208,7 @@ export const ScatterAnalysis: React.FC<ChartProps> = ({ data, labels }) => {
   );
 };
 
-export const RevenuePieChart: React.FC<ChartProps> = ({ data, labels }) => {
+export const RevenuePieChart: React.FC<ChartProps> = ({ data }) => {
   const activeData = data.filter(d => d.revenue > 0);
   return (
     <ResponsiveContainer width="100%" height={400}>
@@ -230,7 +224,7 @@ export const RevenuePieChart: React.FC<ChartProps> = ({ data, labels }) => {
           nameKey="source"
           stroke="none"
         >
-          {activeData.map((entry, index) => (
+          {activeData.map((_entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="#020617" strokeWidth={2} />
           ))}
         </Pie>
